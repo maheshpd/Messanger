@@ -9,6 +9,7 @@
 import UIKit
 import FirebaseAuth
 
+@available(iOS 13.0, *)
 class LoginViewController: UIViewController {
     
     private let scrollView: UIScrollView = {
@@ -114,9 +115,11 @@ class LoginViewController: UIViewController {
         }
         
         //Firebase Login
-        
-        FirebaseAuth.Auth.auth().signIn(withEmail: email, password: password, completion: {authresult, error in
+        FirebaseAuth.Auth.auth().signIn(withEmail: email, password: password, completion: { [weak self] authresult, error in
             
+            guard let strongSelf = self else {
+                return
+            }
             guard let result = authresult, error == nil else {
                 print("Failed to log in user with email: \(email)")
                 return
@@ -124,6 +127,7 @@ class LoginViewController: UIViewController {
             
             let user = result.user
             print("Logged InUser\(user)")
+            strongSelf.navigationController?.dismiss(animated: true, completion: nil)
         })
     }
     
@@ -143,6 +147,7 @@ class LoginViewController: UIViewController {
     
 }
 
+@available(iOS 13.0, *)
 extension LoginViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField == emailField {
