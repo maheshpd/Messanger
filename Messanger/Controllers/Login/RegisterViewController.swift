@@ -25,6 +25,7 @@ class RegisterViewController: UIViewController {
         imageView.contentMode = .scaleAspectFit
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 2
+        imageView.tintColor = UIColor.gray
         imageView.layer.borderColor = UIColor.lightGray.cgColor
         return imageView
     }()
