@@ -8,9 +8,13 @@
 
 import UIKit
 import FirebaseAuth
+import JGProgressHUD
 
 @available(iOS 13.0, *)
 class LoginViewController: UIViewController {
+    
+    private let spinner = JGProgressHUD(style: .dark)
+    
     
     private let scrollView: UIScrollView = {
        let scrollView = UIScrollView()
@@ -114,12 +118,20 @@ class LoginViewController: UIViewController {
             return
         }
         
+        spinner.show(in: view)
+        
         //Firebase Login
         FirebaseAuth.Auth.auth().signIn(withEmail: email, password: password, completion: { [weak self] authresult, error in
             
-            guard let strongSelf = self else {
+            
+        guard let strongSelf = self else {
                 return
             }
+            
+            DispatchQueue.main.async {
+                self?.spinner.dismiss()
+            }
+            
             guard let result = authresult, error == nil else {
                 print("Failed to log in user with email: \(email)")
                 return
